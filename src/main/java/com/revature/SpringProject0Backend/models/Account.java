@@ -10,13 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
 @Table(name="account")
-@Getter @Setter @NoArgsConstructor
 public class Account {
 
 	@Id
@@ -36,11 +31,43 @@ public class Account {
 	@ManyToMany(mappedBy="accounts")
 	private List<User> users;
 	
+	public Account() {}
 	public Account(int id, double balance, AccountStatus status, AccountType type) {
 		this.id = id;
 		this.balance = balance;
 		this.status = status;
 		this.type = type;
+	}
+
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+	public AccountStatus getStatus() {
+		return status;
+	}
+	public void setStatus(AccountStatus status) {
+		this.status = status;
+	}
+	public AccountType getType() {
+		return type;
+	}
+	public void setType(AccountType type) {
+		this.type = type;
+	}
+	public List<User> getUsers() {
+		return users;
+	}
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	@Override
