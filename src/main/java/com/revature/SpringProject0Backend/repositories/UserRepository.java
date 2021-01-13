@@ -8,4 +8,5 @@ import com.revature.SpringProject0Backend.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+	public User findByUsername(String username);
 }

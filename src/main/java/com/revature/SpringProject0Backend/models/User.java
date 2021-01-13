@@ -33,6 +33,9 @@ public class User {
 	@Column(name="lastname", nullable=false)
 	private String lastname;
 	
+	@Column(name="email", unique=true, nullable=false)
+	private String email;
+	
 	@Column(name="role", nullable=false)
 	private Role role;
 	
@@ -41,13 +44,14 @@ public class User {
 	private List<Account> accounts;
 
 	public User() {}
-	public User(int id, String username, String password, String firstname, String lastname, Role role) {
+	public User(int id, String username, String password, String firstname, String lastname, String email, Role role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstname = firstname;
 		this.lastname = lastname;
+		this.email = email;
 		this.role = role;
 	}
 
@@ -80,6 +84,12 @@ public class User {
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public Role getRole() {
 		return role;
