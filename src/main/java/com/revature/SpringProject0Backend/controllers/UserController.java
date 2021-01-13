@@ -30,11 +30,16 @@ public class UserController {
 	UserService userService;
 	
 	/* Accepts a POST request with a user in its body and creates that user in the database
-	 * Returns a 201 Created*/
+	 * Returns a 201 Created, if creation fails, returns a 400 Bad Request */
 	@PostMapping(path="/create", consumes= {MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<ClientMessage> createUser(@RequestBody User user) {
-		URI location = URI.create("/user/view/" + userService.createNewUser(user));
-		return ResponseEntity.created(location).build();
+	public ResponseEntity createUser(@RequestBody User user) {
+		int newUserId = userService.createNewUser(user);
+		if (newUserId != -1) {
+			URI location = URI.create("/user/view/" + newUserId);
+			return ResponseEntity.created(location).build();
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
 	}
 	
 	/* Accepts a GET request and returns 200 OK with all users as json data */
@@ -44,12 +49,13 @@ public class UserController {
 		return ResponseEntity.ok(UserList);
 	}
 	
-	//TODO: this crashes if the user does not exist
-	/* Accepts a GET request and returns 200 OK with the user at the specified id */
+	/* Accepts a GET request and returns 200 OK with the user at the specified id,
+	 * if the requested resource is not found, returns a 404 Not Found */
 	@GetMapping(path="/view/{userId}", produces= {MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<User> viewUser(@PathVariable("userId") int userId) {
 		User user = userService.retrieveById(userId);
-		return ResponseEntity.ok(user);
+		if (user != null) return ResponseEntity.ok(user);
+		else return ResponseEntity.notFound().build();
 	}
 	
 	/* Accepts a PUT request with the updated user and updates the user in the database
@@ -64,7 +70,6 @@ public class UserController {
 		}
 	}
 	
-	//TODO: if you try to delete a user that doesnt exist (possibly an uncaught exception) - solution possibly related to fixing service condition
 	/* Accepts a DELETE request with the id and deletes the id from the database*/
 	@DeleteMapping(path="/delete/{userId}")
 	public ResponseEntity<ClientMessage> deleteUser(@PathVariable("userId") int userId) {

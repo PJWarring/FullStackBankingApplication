@@ -16,7 +16,11 @@ public class UserService {
 
 	//Saves the provided user then returns the generated id
 	public int createNewUser(User user) {
-		return userRepository.save(user).getId();
+		try {
+			return userRepository.save(user).getId();
+		} catch(Exception e) {
+			return -1;
+		}
 	}
 
 	//Returns all users
@@ -26,7 +30,11 @@ public class UserService {
 	
 	//Returns user at specified id
 	public User retrieveById(int id) {
-		return userRepository.findById(id).get();
+		try {
+			return userRepository.findById(id).get();
+		} catch(Exception e) {
+			return null;
+		}
 	}
 	
 	//Returns user with specified username
@@ -39,7 +47,11 @@ public class UserService {
 	}
 	
 	public boolean deleteUser(int userId) {
-		userRepository.deleteById(userId);
-		return true; //TODO: this will always return true, either remove the boolean or change it so its possible to fail
+		try {
+			userRepository.deleteById(userId);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
 	}
 }
