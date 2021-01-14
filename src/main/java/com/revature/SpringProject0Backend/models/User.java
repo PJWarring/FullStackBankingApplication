@@ -39,7 +39,7 @@ public class User {
 	@Column(name="role", nullable=false)
 	private Role role;
 	
-	@ManyToMany(cascade={CascadeType.ALL})
+	@ManyToMany
     @JoinTable(name = "user_account")
 	private List<Account> accounts;
 

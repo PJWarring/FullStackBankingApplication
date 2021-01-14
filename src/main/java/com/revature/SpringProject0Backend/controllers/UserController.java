@@ -70,10 +70,17 @@ public class UserController {
 		}
 	}
 	
-	/* Accepts a DELETE request with the id and deletes the id from the database*/
+	/* Accepts a DELETE request with the id and deletes the id'd resource from the database*/
 	@DeleteMapping(path="/delete/{userId}")
 	public ResponseEntity<ClientMessage> deleteUser(@PathVariable("userId") int userId) {
 		ClientMessage body = userService.deleteUser(userId) ? SUCCESSFULLY_DELETED : DELETION_FAILED;
 		return ResponseEntity.ok(body);
+	}
+	
+	/* Accepts a GET request and returns 200 OK with all users that own the specified accountId */
+	@GetMapping(path="/view/account/{accountId}", produces= {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<List<User>> viewUsersByUser(@PathVariable("accountId") int accountId) {
+		List<User> UserList = userService.retrieveUsersByAccount(accountId);
+		return ResponseEntity.ok(UserList);
 	}
 }

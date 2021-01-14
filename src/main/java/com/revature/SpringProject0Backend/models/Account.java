@@ -2,6 +2,7 @@ package com.revature.SpringProject0Backend.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="account")
@@ -28,7 +31,8 @@ public class Account {
 	@Column(name="type", nullable=false)
 	private AccountType type;
 	
-	@ManyToMany(mappedBy="accounts")
+	@JsonBackReference //this prevents recursion when account is returned as a json value
+	@ManyToMany(mappedBy="accounts", cascade= {CascadeType.ALL})
 	private List<User> users;
 	
 	public Account() {}

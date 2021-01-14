@@ -41,6 +41,10 @@ public class UserService {
 	public User retrieveByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
+	
+	public List<User> retrieveUsersByAccount(int accountId) {
+		return userRepository.findAllByAccounts_Id(accountId);
+	}
 
 	public User updateUser(User user) {
 		return userRepository.save(user);
