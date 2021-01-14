@@ -119,9 +119,12 @@ public class AccountController {
 			updatedAccounts.add(updatedAccount);
 			validTransaction = updatedAccount == null;
 		} else if (newAccounts.size() == 2) {
-			//TODO: perform SQL transaction here to update both accounts in newAccounts and add both
-			//accounts to updated accounts
-			validTransaction = true; //TODO: change this so it works
+			for (int i = 0; i < newAccounts.size(); i++) { //TODO: if either of these accounts fail, it should rollback, currently it does not; however, it does state if it failed
+				Account updatedAccount = accountService.updateAccount(newAccounts.get(0));
+				if (updatedAccount == null) { validTransaction = false; break;}
+				updatedAccounts.add(updatedAccount);
+			}
+			validTransaction = true;
 		} else { //This should never happen, the size of newAccounts is <1 || >2 - this won't happen unless implementation is changed without updating this controller method
 			validTransaction = false;
 		}
