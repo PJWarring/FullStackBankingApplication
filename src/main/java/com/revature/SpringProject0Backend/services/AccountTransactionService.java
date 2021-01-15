@@ -25,6 +25,7 @@ public class AccountTransactionService {
 		return new AccountTransactionDTO(accountTransaction);
 	}
 	
+	//this will perform the account transaction its provided
 	public List<Account> performTransaction(AccountTransaction accountTransaction) {
 		//TODO: log the transaction object here
 		List<Account> newAccounts = new ArrayList<>();
@@ -49,5 +50,20 @@ public class AccountTransactionService {
 		} else {	//This should never happen (the method would have to not exist in AccountTransactionMethod, or not yet be implemented)
 			return null;
 		}
+	}
+	
+	//this performs logic checking to determine if a transaction is valid
+	public boolean verifyTransaction(AccountTransaction accountTransaction) {
+		if (accountTransaction.getAmount() <= 0) return false;
+		if (accountTransaction.getMethod().equals(AccountTransactionMethod.DEPOSIT) || accountTransaction.getMethod().equals(AccountTransactionMethod.TRANSFER)) {
+			//there is no condition not already covered where depositing fails
+			return true;
+		}
+		if (accountTransaction.getMethod().equals(AccountTransactionMethod.WITHDRAW) || accountTransaction.getMethod().equals(AccountTransactionMethod.TRANSFER)) {
+			if (accountTransaction.getSrcAccount().getBalance() - accountTransaction.getAmount() < 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

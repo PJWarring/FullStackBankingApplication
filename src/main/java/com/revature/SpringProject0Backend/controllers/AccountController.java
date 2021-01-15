@@ -114,6 +114,7 @@ public class AccountController {
 		List<Account> newAccounts = accountTransactionService.performTransaction(accountTransaction);
 		boolean validTransaction;
 		List<Account> updatedAccounts = new ArrayList<>();
+		if (accountTransactionService.verifyTransaction(accountTransaction)) return ResponseEntity.badRequest().build();
 		if (newAccounts.size() == 1) { //TODO: depositing, withdrawing, transferring need value checking (to prevent overdrafting and depositing negative values)
 			Account updatedAccount = accountService.updateAccount(newAccounts.get(0));
 			updatedAccounts.add(updatedAccount);
