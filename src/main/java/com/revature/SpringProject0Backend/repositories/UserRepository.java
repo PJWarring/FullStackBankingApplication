@@ -11,5 +11,6 @@ import com.revature.SpringProject0Backend.models.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	public User findByUsername(String username);
+	public User findByEmail(String email);
 	public List<User> findAllByAccounts_Id(int accountId);
 }

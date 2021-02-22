@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.revature.SpringProject0Backend.models.Account;
 import com.revature.SpringProject0Backend.models.AccountStatus;
+import com.revature.SpringProject0Backend.models.dtos.AccountDTO;
 import com.revature.SpringProject0Backend.repositories.AccountRepository;
 
 @Service("accountService")
@@ -54,5 +55,13 @@ public class AccountService {
 	
 	public Account updateAccount(Account account) {
 		return accountRepository.save(account);
+	}
+	
+	public Account convertFromDTO(AccountDTO accountDTO) {
+		return new Account(accountDTO);
+	}
+	
+	public AccountDTO convertToDTO(Account account, int ownerid) {
+		return new AccountDTO(account, ownerid);
 	}
 }

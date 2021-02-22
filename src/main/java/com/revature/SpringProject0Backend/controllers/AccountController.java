@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.SpringProject0Backend.models.Account;
 import com.revature.SpringProject0Backend.models.AccountStatus;
 import com.revature.SpringProject0Backend.models.AccountTransaction;
-import com.revature.SpringProject0Backend.models.User;
 import com.revature.SpringProject0Backend.models.dtos.AccountTransactionDTO;
 import com.revature.SpringProject0Backend.services.AccountService;
 import com.revature.SpringProject0Backend.services.AccountTransactionService;
 import com.revature.SpringProject0Backend.util.ClientMessage;
 
+@CrossOrigin(origins = "*") //TODO: See user controller
 @RestController("accountController")
 @RequestMapping("/account")
-@CrossOrigin(origins = "http://localhost:4200")
 public class AccountController {
-
-	/* TODO: Controller Methods
-	 *update account (seperately deposit, withdraw, transfer, add new owner(s), remove one or more current owner, approve pending account, close current account)
-	 *delete account (to be used when an account is closed or denied) - TODO: DBG: this cascading to users and deleting them when it shouldnt */
+	
+	private static Logger log = Logger.getLogger(AccountController.class);
 	
 	@Autowired
 	AccountService accountService;
@@ -116,7 +114,7 @@ public class AccountController {
 		List<Account> newAccounts = accountTransactionService.performTransaction(accountTransaction);
 		boolean validTransaction;
 		List<Account> updatedAccounts = new ArrayList<>();
-		if (accountTransactionService.verifyTransaction(accountTransaction)) return ResponseEntity.badRequest().build();
+		if (!accountTransactionService.verifyTransaction(accountTransaction)) return ResponseEntity.badRequest().build();
 		if (newAccounts.size() == 1) {
 			Account updatedAccount = accountService.updateAccount(newAccounts.get(0));
 			updatedAccounts.add(updatedAccount);

@@ -54,14 +54,15 @@ public class AccountTransactionService {
 	
 	//this performs logic checking to determine if a transaction is valid
 	public boolean verifyTransaction(AccountTransaction accountTransaction) {
-		if (accountTransaction.getAmount() <= 0) return false;
+		if (accountTransaction.getMethod() == AccountTransactionMethod.TRANSFER && accountService.retrieveById(accountTransaction.getDestAccount().getId()) == null) return false; //the method is transfer and the destination account does not exist
+		if (accountTransaction.getAmount() <= 0) return false; //negative or empty amount
 		if (accountTransaction.getMethod().equals(AccountTransactionMethod.DEPOSIT) || accountTransaction.getMethod().equals(AccountTransactionMethod.TRANSFER)) {
 			//there is no condition not already covered where depositing fails
 			return true;
 		}
 		if (accountTransaction.getMethod().equals(AccountTransactionMethod.WITHDRAW) || accountTransaction.getMethod().equals(AccountTransactionMethod.TRANSFER)) {
 			if (accountTransaction.getSrcAccount().getBalance() - accountTransaction.getAmount() < 0) {
-				return false;
+				return false; //amount to be withdrawn exceeds the balance of the account
 			}
 		}
 		return true;

@@ -2,10 +2,13 @@ package com.revature.SpringProject0Backend.controllers;
 
 import static com.revature.SpringProject0Backend.util.ClientMessageUtil.DELETION_FAILED;
 import static com.revature.SpringProject0Backend.util.ClientMessageUtil.SUCCESSFULLY_DELETED;
+import static com.revature.SpringProject0Backend.util.ClientMessageUtil.VALID_FIELDS;
+import static com.revature.SpringProject0Backend.util.ClientMessageUtil.INVALID_FIELDS;
 
 import java.net.URI;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +26,13 @@ import com.revature.SpringProject0Backend.models.User;
 import com.revature.SpringProject0Backend.services.UserService;
 import com.revature.SpringProject0Backend.util.ClientMessage;
 
+@CrossOrigin(origins = "*") //TODO: this should be set to the front end address (but I was having troubles getting it to work)
 @RestController("userController")
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
+	private static Logger log = Logger.getLogger(UserController.class);
+	
 	@Autowired
 	UserService userService;
 	
@@ -42,6 +47,12 @@ public class UserController {
 		} else {
 			return ResponseEntity.badRequest().build();
 		}
+	}
+	
+	@PostMapping(path="/verify", consumes= {MediaType.APPLICATION_JSON_VALUE})
+	public ResponseEntity<ClientMessage> verifyUniqueValues(@RequestBody User user) {
+		ClientMessage body = userService.verifyValues(user) ? VALID_FIELDS : INVALID_FIELDS;
+		return ResponseEntity.ok(body);
 	}
 	
 	/* Accepts a GET request and returns 200 OK with all users as json data */

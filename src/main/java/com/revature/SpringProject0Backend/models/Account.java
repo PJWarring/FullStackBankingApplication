@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.revature.SpringProject0Backend.models.dtos.AccountDTO;
 
 @Entity
 @Table(name="account")
@@ -41,6 +42,12 @@ public class Account {
 		this.balance = balance;
 		this.status = status;
 		this.type = type;
+	}
+	public Account(AccountDTO accountDTO) {
+		this.id = accountDTO.getId();
+		this.balance = accountDTO.getBalance();
+		this.status = accountDTO.getStatus();
+		this.type = accountDTO.getType();
 	}
 
 	public int getId() {

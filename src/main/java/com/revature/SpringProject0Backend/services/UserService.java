@@ -45,6 +45,17 @@ public class UserService {
 	public List<User> retrieveUsersByAccount(int accountId) {
 		return userRepository.findAllByAccounts_Id(accountId);
 	}
+	
+	public boolean verifyValues(User user) {
+		try {
+			User temp = userRepository.findByUsername(user.getUsername());
+			User temp2 = userRepository.findByEmail(user.getEmail());
+			if (temp == null && temp2 == null) return true;
+			else return false;
+		} catch(Exception e) {
+			return true;
+		}
+	}
 
 	public User updateUser(User user) {
 		return userRepository.save(user);
